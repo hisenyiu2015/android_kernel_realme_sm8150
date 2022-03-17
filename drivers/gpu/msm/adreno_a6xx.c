@@ -1738,7 +1738,15 @@ static const char *a6xx_iommu_fault_block(struct kgsl_device *device,
 	else if (!mid || (mid > 3))
 		return fault_block[mid];
 
-	mutex_lock(&device->mutex);
+/*
+ * Smmu driver takes a vote on CX gdsc before calling the kgsl
+ * pagefault handler. If there is contention for device mutex in this
+ * path and the dispatcher fault handler is holding this lock, trying
+ * to turn off CX gdsc will fail during the reset. So to avoid blocking
+ * here, try to lock device mutex and return if it fails.
+ */
+         if (!mutex_trylock(&device->mutex))
+                 return "UCHE: unknown";
 
 	if (!kgsl_state_is_awake(device)) {
 		mutex_unlock(&device->mutex);

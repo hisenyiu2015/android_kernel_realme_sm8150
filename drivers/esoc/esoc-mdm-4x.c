@@ -17,6 +17,11 @@
 #include <soc/qcom/sysmon.h>
 #include "esoc-mdm.h"
 
+#ifdef OPLUS_FEATURE_MODEM_MINIDUMP
+/* Liu.Wei@NETWORK.RF.10384, 2020/03/27, Add for report modem crash uevent */
+#include <soc/qcom/subsystem_restart.h>
+#endif /*OPLUS_FEATURE_MODEM_MINIDUMP*/
+
 enum gpio_update_config {
 	GPIO_UPDATE_BOOTING_CONFIG = 1,
 	GPIO_UPDATE_RUNNING_CONFIG,
@@ -384,6 +389,8 @@ static void mdm_get_restart_reason(struct work_struct *work)
 		if (!ret) {
 			esoc_mdm_log("restart reason is %s\n", sfr_buf);
 			dev_err(dev, "mdm restart reason is %s\n", sfr_buf);
+			/* Liu.Wei@NETWORK.RF.10384, 2020/03/27, Add for report modem crash uevent */
+			__subsystem_send_uevent(dev, sfr_buf);
 			break;
 		}
 		msleep(SFR_RETRY_INTERVAL);

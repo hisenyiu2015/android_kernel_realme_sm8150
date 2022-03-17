@@ -1,29 +1,39 @@
 # SPDX-License-Identifier: GPL-2.0
-dts-dirs += actions
-dts-dirs += al
-dts-dirs += allwinner
-dts-dirs += altera
-dts-dirs += amd
-dts-dirs += amlogic
-dts-dirs += apm
-dts-dirs += arm
-dts-dirs += broadcom
-dts-dirs += cavium
-dts-dirs += exynos
-dts-dirs += freescale
-dts-dirs += hisilicon
-dts-dirs += marvell
-dts-dirs += mediatek
-dts-dirs += nvidia
-dts-dirs += qcom
-dts-dirs += realtek
-dts-dirs += renesas
-dts-dirs += rockchip
-dts-dirs += socionext
-dts-dirs += sprd
-dts-dirs += xilinx
-dts-dirs += lg
-dts-dirs += zte
+#ifdef VENDOR_EDIT
+#/*ye.zhang@BSP.Bootloader.Bootflow, 2020-6-18, Add for oppo project*/
+#dts-dirs += actions
+#dts-dirs += al
+#dts-dirs += allwinner
+#dts-dirs += altera
+#dts-dirs += amd
+#dts-dirs += amlogic
+#dts-dirs += apm
+#dts-dirs += arm
+#dts-dirs += broadcom
+#dts-dirs += cavium
+#dts-dirs += exynos
+#dts-dirs += freescale
+#dts-dirs += hisilicon
+#dts-dirs += marvell
+#dts-dirs += mediatek
+#dts-dirs += nvidia
+#dts-dirs += qcom
+#dts-dirs += realtek
+#dts-dirs += renesas
+#dts-dirs += rockchip
+#dts-dirs += socionext
+#dts-dirs += sprd
+#dts-dirs += xilinx
+#dts-dirs += lg
+#dts-dirs += zte
+#else
+ifeq ($(CONFIG_BRAND_SHOW_FLAG),realme)
+    ifeq ($(CONFIG_SHIPPING_API_LEVEL),28)
+        dts-dirs += 19781
+    else
+        dts-dirs += 19696
+    endif
+endif
 
 subdir-y	:= $(dts-dirs)
 

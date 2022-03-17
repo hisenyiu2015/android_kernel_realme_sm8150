@@ -138,6 +138,16 @@ struct ion_buffer {
 	struct sg_table *sg_table;
 	struct list_head attachments;
 	struct list_head vmas;
+#if defined(OPLUS_FEATURE_MEMLEAK_DETECT) && defined(CONFIG_DUMP_TASKS_MEM)
+	/* Kui.Zhang@BSP.Kernel.MM, 2020-05-20 record ions info of task. */
+	struct task_struct *tsk;
+#endif
+#if defined(OPLUS_FEATURE_MEMLEAK_DETECT) && defined(CONFIG_MEMLEAK_DETECT_THREAD) && defined(CONFIG_OPPO_SVELTE)
+	/* Kui.Zhang@BSP.Kernel.MM, 2020-05-20 add record the buffer
+	 * create time and calc the buffer age on dump.
+	 */
+	unsigned long jiffies;
+#endif
 };
 
 void ion_buffer_destroy(struct ion_buffer *buffer);

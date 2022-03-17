@@ -275,7 +275,7 @@ void kgsl_process_init_sysfs(struct kgsl_device *device,
 	/* Keep private valid until the sysfs enries are removed. */
 	kgsl_process_private_get(private);
 
-	snprintf(name, sizeof(name), "%d", private->pid);
+	snprintf(name, sizeof(name), "%d", pid_nr(private->pid));
 
 	if (kobject_init_and_add(&private->kobj, &ktype_mem_entry,
 		kgsl_driver.prockobj, name)) {
@@ -302,6 +302,14 @@ void kgsl_process_init_sysfs(struct kgsl_device *device,
 				debug_memstats[i].attr.name);
 	}
 }
+
+#ifdef OPLUS_FEATURE_HEALTHINFO
+//Jiheng.Xie@TECH.BSP.Performance, 2019-07-22, add for gpu total used account
+unsigned long gpu_total(void)
+{
+	return (unsigned long)atomic_long_read(&kgsl_driver.stats.page_alloc);
+}
+#endif /* OPLUS_FEATURE_HEALTHINFO */
 
 static ssize_t kgsl_drv_memstat_show(struct device *dev,
 				 struct device_attribute *attr,
@@ -852,6 +860,7 @@ void kgsl_memdesc_init(struct kgsl_device *device,
 		(memdesc->flags & KGSL_MEMALIGN_MASK) >> KGSL_MEMALIGN_SHIFT,
 		ilog2(PAGE_SIZE));
 	kgsl_memdesc_set_align(memdesc, align);
+	spin_lock_init(&memdesc->lock);
 }
 
 int

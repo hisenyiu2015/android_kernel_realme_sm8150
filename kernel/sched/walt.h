@@ -290,6 +290,10 @@ static inline int same_cluster(int src_cpu, int dst_cpu)
 	return cpu_rq(src_cpu)->cluster == cpu_rq(dst_cpu)->cluster;
 }
 
+#ifdef OPLUS_FEATURE_POWER_CPUFREQ
+unsigned int schedtune_window_policy(struct task_struct *p);
+#endif
+
 void sort_clusters(void);
 
 void walt_irq_work(struct irq_work *irq_work);

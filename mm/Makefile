@@ -105,3 +105,34 @@ obj-$(CONFIG_HARDENED_USERCOPY) += usercopy.o
 obj-$(CONFIG_PERCPU_STATS) += percpu-stats.o
 obj-$(CONFIG_HMM) += hmm.o
 obj-$(CONFIG_PROCESS_RECLAIM)	+= process_reclaim.o
+
+#ifdef OPLUS_FEATURE_PROCESS_RECLAIM
+ifdef CONFIG_PROCESS_RECLAIM_ENHANCE
+obj-y += process_mm_reclaim.o
+else
+obj-y += process_mm_reclaim_weak.o
+endif
+#endif /* OPLUS_FEATURE_PROCESS_RECLAIM */
+
+#ifdef OPLUS_FEATURE_HEALTHINFO
+#/* Jiheng.Xie@TECH.BSP.Kernel, 2019-12-11, add for slub debug*/
+obj-y += oppo_healthinfo/
+#endif /* OPLUS_FEATURE_HEALTHINFO */
+
+#ifdef OPLUS_FEATURE_MULTI_KSWAPD
+obj-$(CONFIG_OPLUS_MULTI_KSWAPD) += multi_kswapd/
+#endif /*OPLUS_FEATURE_MULTI_KSWAPD*/
+
+#if defined(OPLUS_FEATURE_MULTI_FREEAREA)
+obj-$(CONFIG_PHYSICAL_ANTI_FRAGMENTATION) += multi_freearea.o
+#endif
+
+#if defined(OPLUS_FEATURE_MEMLEAK_DETECT)
+#/* Kui.Zhang@TEC.Kernel.Performance, 2019-03-13, collect all tasks memory info */
+#ifeq ($(OPLUS_FEATURE_MEMLEAK_DETECT), yes)
+obj-$(CONFIG_DUMP_TASKS_MEM) += task_mem/
+#endif
+#endif /*defined(OPLUS_FEATURE_MEMLEAK_DETECT)
+#if defined(OPLUS_FEATURE_VIRTUAL_RESERVE_MEMORY)
+obj-$(CONFIG_VIRTUAL_RESERVE_MEMORY) += resmap_account.o
+#endif /*defined(OPLUS_FEATURE_VIRTUAL_RESERVE_MEMORY)
